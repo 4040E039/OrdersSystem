@@ -62,7 +62,8 @@
     import { DatePicker } from 'v-calendar';
     import moment from 'moment'
     import VueNextSelect from 'vue-next-select'
-    import 'vue-next-select/dist/modal_ver.css'
+    import '@/../css/SearchSelect.css'
+    
     export default {
         components: {
             JetButton,

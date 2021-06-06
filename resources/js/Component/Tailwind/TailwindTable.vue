@@ -28,7 +28,7 @@
             </tbody>
           </table>
         </div>
-        <div style="background-color:#f3f4f6" class="flex justify-end mt-5">
+        <div class="flex justify-end mt-5">
           <vue-tailwind-pagination v-show="total > 0" :current="currentPage" :total="total" :per-page="perPage"  @page-changed="currentPage = $event" />
         </div>
       </div>
