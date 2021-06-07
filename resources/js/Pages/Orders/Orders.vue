@@ -25,8 +25,8 @@
                   <photograph-icon class="h-5 w-5 text-gray-500" />
                 </inertia-link>
               </button>
-              <div v-show="raiseOrder.is_found === 0 && countDown < 0">
-                <button v-if="raiseOrder.is_found === 0 && countDown < 0" @click="raiseOrderCompleted(id)" class="p-2 focus:outline-none focus:ring focus:border-gray-100 rounded-full">
+              <div v-show="raiseOrder.is_found === 0 && countDown < 0 && raiseOrder.user_id === $attrs.user.id">
+                <button @click="raiseOrderCompleted(id)" class="p-2 focus:outline-none focus:ring focus:border-gray-100 rounded-full">
                 <clipboard-check-icon class="h-5 w-5 text-gray-500"/>
                 </button>
               </div>

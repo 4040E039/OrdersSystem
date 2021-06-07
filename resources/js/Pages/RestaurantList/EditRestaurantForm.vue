@@ -2,6 +2,11 @@
     <app-layout>
       <div class="py-3 sm:py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+          <inertia-link :href="`/restaurant-list/${id}`">
+            <button class="mb-12 shadow text-gray-50 bg-gray-400 px-3 py-1 rounded">
+                <chevron-double-left-icon class="h-5 w-5" />
+            </button>
+          </inertia-link>
           <jet-form-section @submitted="updateRestaurantInformation">
               <template #title>
                   Restaurant Information
@@ -65,9 +70,10 @@
     import JetActionMessage from '@/Jetstream/ActionMessage'
     import JetSecondaryButton from '@/Jetstream/SecondaryButton'
     import JetInputError from '@/Jetstream/InputError'
+    import{ ChevronDoubleLeftIcon } from '@heroicons/vue/solid'
 
     export default {
-        components: { AppLayout, JetButton, JetInput, JetTextarea, JetLabel, JetActionMessage, JetSecondaryButton, JetFormSection, JetInputError },
+        components: { AppLayout, JetButton, JetInput, JetTextarea, JetLabel, JetActionMessage, JetSecondaryButton, JetFormSection, JetInputError, ChevronDoubleLeftIcon },
         props: {
           restaurant: Object,
           id: String
