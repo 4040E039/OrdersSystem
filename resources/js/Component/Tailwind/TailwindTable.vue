@@ -34,6 +34,7 @@
       </div>
     </div>
   </div>
+  <div class="pr-6 px-10 transform rotate-45 hidden"><span class="transform -rotate-45"></span></div>
 </template>
 
 <script>

@@ -80,6 +80,7 @@
           },
            uploadPhoto(event) {
               let count = event.target.files.length
+              let reloadCount = 0
               while(count--) {
                 const file = event.target.files[count];
                 const form = new FormData();
@@ -90,9 +91,10 @@
                   if(response.data.messages !== "") {
                      this.setTimeoutErrorMessage(response.data.messages, file.name)
                   }
+                  reloadCount++
+                  if(reloadCount === event.target.files.length) setTimeout(() => this.$inertia.reload(), 100 )
                 });
               }
-              setTimeout(() => this.$inertia.reload(), 100 )
            },
            remove(id) {
              if(confirm('Do you want to delete this photo?')) {

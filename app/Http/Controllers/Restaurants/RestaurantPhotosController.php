@@ -45,7 +45,7 @@ class RestaurantPhotosController extends Controller
 
         $validator = Validator::make($request->all(), [
           'id' => 'required',
-          'images' => 'required|image|max:5000',
+          'images' => 'required|image|max:3072',
         ]);
   
         if($validator->fails()) {

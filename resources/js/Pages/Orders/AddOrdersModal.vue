@@ -32,7 +32,7 @@
           </div>
         </template>
         <template #footer>
-            <jet-button type="text" class="ml-4" @click="save()">
+            <jet-button type="text" class="ml-4" v-if="handlerSaveButtonDisplay" @click="save()">
                 Save
             </jet-button>
         </template>
@@ -46,7 +46,8 @@
     import JetTextarea from '@/Jetstream/Textarea'
     import JetInputError from '@/Jetstream/InputError'
     import JetLabel from '@/Jetstream/Label'
-    import { reactive, onMounted } from "vue";
+    import { reactive, onMounted, ref } from "vue";
+    
     export default {
         components: {
             JetButton,
@@ -63,6 +64,8 @@
           isEdit: Number
         },
         setup(props) {
+          const handlerSaveButtonDisplay = ref(false)
+
           const form = reactive({
             order_item: null,
             order_quantity: null,
@@ -83,13 +86,15 @@
                 form.order_quantity = response.data.order_quantity
                 form.order_cost = response.data.order_cost
                 form.memo = response.data.memo
+                handlerSaveButtonDisplay.value = true
               })
             }
             onMounted(getOrder)
-          }
+          } else handlerSaveButtonDisplay.value = true
           return {
             form,
             errors,
+            handlerSaveButtonDisplay
           };
         },
         methods: {

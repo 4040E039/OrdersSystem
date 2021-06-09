@@ -33,9 +33,8 @@
             </div>
             <!-- component -->
             <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4">
-                <!-- 1 card -->
                 <div v-for="raiseOrder of raiseOrders" :key="raiseOrder.id" class="relative bg-white py-5 px-7 rounded-3xl w-64 my-3 shadow-xl mx-auto">
-                    <div class="text-white flex items-center absolute rounded-full p-0.5 shadow-xl bg-gray-500 left-4 -top-6">
+                    <div class="bg-white flex items-center absolute rounded-full p-0.5 shadow-xl left-4 -top-6 border-2 border-gray-400">
                         <img class="h-14 w-14 rounded-full object-cover" :src="handlerPhoto(raiseOrder.profile_photo_path, raiseOrder.name)" />
                     </div>
                     <div class="w-full flex justify-end space-x-3">
@@ -64,7 +63,7 @@
                             <div class="my-2">
                               <p class="font-semibold text-base mb-2">Status</p>
                               <div class="flex flex-wrap">
-                                <span v-if="raiseOrder.status === 1" class="inline-block rounded-full text-white bg-indigo-500 px-2 py-1 text-xs font-bold mr-3">open</span>
+                                <span v-if="raiseOrder.status === 1" class="inline-block rounded-full text-white bg-gradient-to-r from-blue-400 to-indigo-400 px-2 py-1 text-xs font-bold mr-3">open</span>
                                 <span v-if="raiseOrder.status === 2" class="inline-block rounded-full text-white bg-yellow-500 px-2 py-1 text-xs font-bold mr-3">ancient</span>
                                 <span v-if="raiseOrder.status === 3" class="inline-block rounded-full text-white bg-gray-500 px-2 py-1 text-xs font-bold mr-3">not yet</span>
                                 <span v-if="raiseOrder.is_found" class="inline-block rounded-full text-white bg-indigo-500 px-2 py-1 text-xs font-bold mr-3">completed</span>

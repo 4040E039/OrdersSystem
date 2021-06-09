@@ -141,6 +141,7 @@
     import AddOrdersModal from '@/Pages/Orders/AddOrdersModal'
     import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
     import JetSearchInput from '@/Jetstream/SearchInput'
+    import _ from 'lodash'
 
     export default {
         components: { 
@@ -247,7 +248,7 @@
           handlerTotal(order) {
             let total = 0;
             for(let row of order) {
-              total += row.order_cost
+              total += _.ceil(row.order_cost, 2);
             }
             return total
           },

@@ -9,6 +9,7 @@ use App\Models\Order;
 use App\Models\TradingRecord;
 use Validator;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class RaiseOrdersController extends Controller
 {
@@ -22,7 +23,7 @@ class RaiseOrdersController extends Controller
         //
         // get Restaurant list
         $raise_orders = array();
-        $now =  date('Y-m-d H-i-s');
+        $now =  Carbon::now();
         $status = $request->input('status');
         $search = $request->input('search');
         $search_date_range = $request->input('searchDateRange');
@@ -34,8 +35,10 @@ class RaiseOrdersController extends Controller
           elseif($status === 3)  $query->where('start_time', '>', $now);
           if($search !== null && $search !== "") $query->where('raise_order_theme', 'like' , "%".$search."%");
           if($search_date_range !== null) {
-            if($search_date_range['start'] === $search_date_range['end']) $query->where('start_time', '>=',  $search_date_range['start']);
-            else $query->where('start_time', '>=',  $search_date_range['start'])->where('end_time', '<=', $search_date_range['end'].' 23-59-59');
+            $start_range = Carbon::parse($search_date_range['start']);
+            $end_range = Carbon::parse($search_date_range['end'].' 23:59:59');
+            if($search_date_range['start'] === $search_date_range['end']) $query->where('start_time', '>=',  $start_range);
+            else $query->where('start_time', '>=',  $start_range)->where('end_time', '<=', $end_range);
           }
         })->join('users', 'users.id', '=', 'raise_orders.user_id')->join('restaurants', 'restaurants.id', '=', 'raise_orders.restaurant_id')->select('raise_orders.*', 'users.profile_photo_path','users.name')->orderBy('start_time', 'desc')->get();
 

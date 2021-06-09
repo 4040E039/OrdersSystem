@@ -44,7 +44,7 @@
         </template>
 
         <template #footer>
-            <jet-button type="text" class="ml-4" @click="save()">
+            <jet-button type="text" class="ml-4" v-if="handlerSaveButtonDisplay" @click="save()">
                 Save
             </jet-button>
         </template>
@@ -81,6 +81,8 @@
           isEdit: Number
         },
         setup(props) {
+          const handlerSaveButtonDisplay = ref(false)
+
           const form = reactive({
             start_time: moment().format('YYYY-MM-DD HH:mm:ss'),
             raise_order_theme: null,
@@ -100,7 +102,7 @@
             const getRestaurants = async () => {
               await axios.post(route('restaurant-api.index')).then(response => {
                 options.value = response.data
-                
+                handlerSaveButtonDisplay.value = true
               })
             }
             onMounted(getRestaurants)
@@ -112,6 +114,7 @@
                 form.start_time = response.data.start_time
                 form.restaurant_selected = response.data.restaurant_id
                 form.open_duration = moment(response.data.end_time).diff(response.data.start_time, "minute");
+                handlerSaveButtonDisplay.value = true
               })
             }
             onMounted(getRaiseOrders)
@@ -120,7 +123,8 @@
           return {
             form,
             errors,
-            options
+            options,
+            handlerSaveButtonDisplay
           };
         },
         methods: {
