@@ -171,7 +171,7 @@ class RaiseOrdersController extends Controller
         $result = array(
           "messages" => "",
         );
-        $raise_order = RaiseOrder::where('id', $id)->where('user_id', $user['id'])->first();
+        $raise_order = RaiseOrder::where('id', $id)->where('user_id', $user['id'])->where('deleted_at', NULL)->first();
 
         if($raise_order) RaiseOrder::destroy($id);
         else $result['messages'] = "delete fail";

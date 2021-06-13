@@ -32,7 +32,7 @@
           </div>
         </template>
         <template #footer>
-            <jet-button type="text" class="ml-4" v-if="handlerSaveButtonDisplay" @click="save()">
+            <jet-button type="button" class="ml-4" v-if="handlerSaveButtonDisplay" @click="save()">
                 Save
             </jet-button>
         </template>
@@ -60,7 +60,7 @@
         emits: ["close-modal"],
         props: {
           openModel: Boolean,
-          raiseOrderId: Number,
+          raiseOrderId: String,
           isEdit: Number
         },
         setup(props) {

@@ -9,6 +9,8 @@ use App\Models\RaiseOrder;
 use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
 use Validator;
+use DB;
+use Carbon\Carbon;
 
 class OrdersController extends Controller
 {
@@ -19,7 +21,8 @@ class OrdersController extends Controller
      */
     public function index($id)
     {
-      $raise_order = RaiseOrder::where('raise_orders.id', $id)->where('raise_orders.deleted_at', NULL)->join('users', 'users.id', '=', 'raise_orders.user_id')->join('restaurants', 'restaurants.id', '=', 'raise_orders.restaurant_id')->select('raise_orders.*', 'users.name', 'restaurants.restaurant_name', 'restaurants.restaurant_telephone')->firstOrFail();
+      $now =  Carbon::now();
+      $raise_order = RaiseOrder::where('raise_orders.id', $id)->where('raise_orders.start_time', '<=', $now)->where('raise_orders.deleted_at', NULL)->join('users', 'users.id', '=', 'raise_orders.user_id')->join('restaurants', 'restaurants.id', '=', 'raise_orders.restaurant_id')->select('raise_orders.*', 'users.name', 'restaurants.restaurant_name', 'restaurants.restaurant_telephone')->firstOrFail();
 
       return Inertia::render('Orders/Orders', [
         'id' => $id,
@@ -63,9 +66,13 @@ class OrdersController extends Controller
             $result['messages'] = $validator->errors();
             return $result;
           }
-          $user = Auth::user();
 
+          $now =  Carbon::now();
+          RaiseOrder::where('raise_orders.id', $form['raise_order_id'])->where('raise_orders.start_time', '<=', $now)->where('raise_orders.end_time', '>=', $now)->where('raise_orders.deleted_at', NULL)->join('users', 'users.id', '=', 'raise_orders.user_id')->join('restaurants', 'restaurants.id', '=', 'raise_orders.restaurant_id')->firstOrFail();
+
+          $user = Auth::user();
           $order = Order::where('raise_order_id', $form['raise_order_id'])->where('deleted_at', NULL)->where('user_id', $user['id'])->where('order_item', trim($form['order_item']))->where('memo', trim($form['memo']))->first();
+
           if($order) {
             $order->order_quantity =  $form['order_quantity'] + $order['order_quantity'];
             $order->order_cost = ($form['order_quantity'] * $form['order_cost']) + $order['order_cost'];
@@ -174,7 +181,10 @@ class OrdersController extends Controller
             $result['messages'] = $validator->errors();
             return $result;
           }
-
+          
+          $now =  Carbon::now();
+          RaiseOrder::where('raise_orders.id', $form['raise_order_id'])->where('raise_orders.start_time', '<=', $now)->where('raise_orders.end_time', '>=', $now)->where('raise_orders.deleted_at', NULL)->join('users', 'users.id', '=', 'raise_orders.user_id')->join('restaurants', 'restaurants.id', '=', 'raise_orders.restaurant_id')->firstOrFail();
+          
           $order = Order::where('raise_order_id', $form['raise_order_id'])->where('deleted_at', NULL)->where('user_id', $user['id'])->where('order_item', trim($form['order_item']))->where('memo', trim($form['memo']))->first();
 
           if($order && $old_order['id'] !== $order['id']) {
@@ -208,10 +218,26 @@ class OrdersController extends Controller
           "messages" => "",
         );
        
-        $order = Order::where('id', $id)->where('user_id', $user['id'])->first();
+        $order = Order::where('id', $id)->where('user_id', $user['id'])->where('deleted_at', NULL)->first();
         if($order) Order::destroy($id);
         else $result['messages'] = "delete fail";
 
         return $result;
     }
+    
+    public function sum($id)
+    {
+
+      $orders = Order::where('raise_order_id', $id)->where('deleted_at', NULL)->select('order_item', 'memo', DB::raw('sum(order_cost) as order_cost_sum'), DB::raw('sum(order_quantity) as order_quantity_sum'))->groupBy('order_item', 'memo')->get();
+      
+      $restaurant = RaiseOrder::where('raise_orders.id', $id)->where('raise_orders.deleted_at', NULL)->join('restaurants', 'restaurants.id', '=', 'raise_orders.restaurant_id')->select('restaurants.restaurant_name', 'restaurants.restaurant_telephone', 'restaurants.restaurant_address')->firstOrFail();
+
+      $result = array(
+        'orders' => $orders,
+        'restaurant' => $restaurant
+      );
+
+      return $result;
+    }
+
 }

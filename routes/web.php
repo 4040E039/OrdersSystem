@@ -100,6 +100,7 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('orders-api')->group(fun
   Route::post('/store', [OrdersController::class, 'store'])->name('orders-api.store');
   Route::delete('/{id}', [OrdersController::class, 'destroy'])->name('orders-api.destroy');
   Route::put('/{id}', [OrdersController::class, 'update'])->name('orders-api.update');
+  Route::get('/sum/{id}', [OrdersController::class, 'sum'])->name('orders-api.sum');
 });
 
 // trading-record-list

@@ -14,7 +14,7 @@
         <div class="py-3 sm:py-12">
           <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="flex justify-end items-center space-x-2 mb-3">
-              <button v-if="countDown > 0" @click="handlerOrdersModal(0)" class="p-2 focus:outline-none focus:ring focus:border-gray-100 rounded-full">
+              <button v-if="countDown > 0 " @click="handlerOrdersModal(0)" class="p-2 focus:outline-none focus:ring focus:border-gray-100 rounded-full">
                <plus-circle-icon class="h-5 w-5 text-gray-500"/>
               </button>
               <button @click="this.handlerRaiseOrdersDetailDisplay = ! this.handlerRaiseOrdersDetailDisplay" class="p-2 focus:outline-none focus:ring focus:border-gray-100 rounded-full">
@@ -27,7 +27,12 @@
               </button>
               <div v-show="raiseOrder.is_found === 0 && countDown < 0 && raiseOrder.user_id === $attrs.user.id">
                 <button @click="raiseOrderCompleted(id)" class="p-2 focus:outline-none focus:ring focus:border-gray-100 rounded-full">
-                <clipboard-check-icon class="h-5 w-5 text-gray-500"/>
+                  <clipboard-check-icon class="h-5 w-5 text-gray-500"/>
+                </button>
+              </div>
+              <div v-show="raiseOrder.user_id === $attrs.user.id">
+                <button @click="handlerSumOrdersModal" class="p-2 focus:outline-none focus:ring focus:border-gray-100 rounded-full">
+                  <eye-icon class="h-5 w-5 text-gray-500"/>
                 </button>
               </div>
               <jet-search-input placeholder="search uesr name" @search="search"/>
@@ -119,7 +124,8 @@
             <!-- End of component -->
           </div>
         </div>
-        <add-orders-modal :isEdit="isEdit" :raiseOrderId = "raiseOrder.id" v-if="openModel" :open-model="openModel" @close-modal="closeModal" />
+        <add-orders-modal :isEdit="isEdit" :raiseOrderId = "id" v-if="openAddOrdersModel" :open-model="openAddOrdersModel" @close-modal="closeAddOrderModal" />
+        <sum-orders-modal :raiseOrderId = "id" v-if="openSumOrdersModel" :open-model="openSumOrdersModel" @close-modal="closeSumOrderModal" />
     </app-layout>
 </template>
 
@@ -138,7 +144,9 @@
     import { PencilIcon } from '@heroicons/vue/solid'
     import { TrashIcon } from '@heroicons/vue/solid'
     import { ClipboardCheckIcon } from '@heroicons/vue/solid'
+    import { EyeIcon } from '@heroicons/vue/solid'
     import AddOrdersModal from '@/Pages/Orders/AddOrdersModal'
+    import SumOrdersModal from '@/Pages/Orders/SumOrdersModal'
     import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
     import JetSearchInput from '@/Jetstream/SearchInput'
     import _ from 'lodash'
@@ -162,8 +170,10 @@
           MenuItem,
           PencilIcon,
           TrashIcon,
+          EyeIcon,
           JetSearchInput,
-          ClipboardCheckIcon
+          ClipboardCheckIcon,
+          SumOrdersModal
         },
         props: {
           id: String,
@@ -171,7 +181,8 @@
         },
         data() {
           return {
-            openModel: false,
+            openAddOrdersModel: false,
+            openSumOrdersModel: false,
             isEdit: 0
           }
         },
@@ -228,12 +239,15 @@
           return { RaiseOrderSort, handlerRaiseOrdersDetailDisplay, countDown, RemainingTime, restaurantDetailUrl, restaurantPhotosUrl, orders, loading, searchValue };
         },
         methods: {
-          closeModal(val) {
-            this.openModel = val
+          closeAddOrderModal(val) {
+            this.openAddOrdersModel = val
             this.loading = false
           },
+          closeSumOrderModal(val) {
+            this.openSumOrdersModel = val
+          },
           handlerOrdersModal(id) {
-            this.openModel = true
+            this.openAddOrdersModel = true
             this.isEdit = id
           },
           removeOrder(id) {
@@ -264,6 +278,9 @@
           search(data) {
             this.searchValue = data
             this.loading = false
+          },
+          handlerSumOrdersModal() {
+            this.openSumOrdersModel = true
           },
         },
     }
