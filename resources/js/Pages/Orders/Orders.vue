@@ -14,23 +14,23 @@
         <div class="py-3 sm:py-12">
           <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="flex justify-end items-center space-x-2 mb-3">
-              <button v-if="countDown > 0 " @click="handlerOrdersModal(0)" class="p-2 focus:outline-none focus:ring focus:border-gray-100 rounded-full">
+              <button v-if="countDown > 0 " @click="handlerOrdersModal(0)" title="add order" class="p-2 focus:outline-none focus:ring focus:border-gray-100 rounded-full">
                <plus-circle-icon class="h-5 w-5 text-gray-500"/>
               </button>
-              <button @click="this.handlerRaiseOrdersDetailDisplay = ! this.handlerRaiseOrdersDetailDisplay" class="p-2 focus:outline-none focus:ring focus:border-gray-100 rounded-full">
+              <button @click="this.handlerRaiseOrdersDetailDisplay = ! this.handlerRaiseOrdersDetailDisplay" title="view raise order detail" class="p-2 focus:outline-none focus:ring focus:border-gray-100 rounded-full">
                <information-circle-icon class="h-5 w-5 text-gray-500"/>
               </button>
-              <button class="p-2 focus:outline-none focus:ring focus:border-gray-100 rounded-full">
+              <button class="p-2 focus:outline-none focus:ring focus:border-gray-100 rounded-full" title="go to restaurant photos">
                 <inertia-link :href="restaurantPhotosUrl">
                   <photograph-icon class="h-5 w-5 text-gray-500" />
                 </inertia-link>
               </button>
-              <div v-show="raiseOrder.is_found === 0 && countDown < 0 && raiseOrder.user_id === $attrs.user.id">
+              <div v-show="raiseOrder.is_found === 0 && countDown < 0 && raiseOrder.user_id === $attrs.user.id" title="completed order">
                 <button @click="raiseOrderCompleted(id)" class="p-2 focus:outline-none focus:ring focus:border-gray-100 rounded-full">
                   <clipboard-check-icon class="h-5 w-5 text-gray-500"/>
                 </button>
               </div>
-              <div v-show="raiseOrder.user_id === $attrs.user.id">
+              <div v-show="raiseOrder.user_id === $attrs.user.id" title="view sum orders">
                 <button @click="handlerSumOrdersModal" class="p-2 focus:outline-none focus:ring focus:border-gray-100 rounded-full">
                   <eye-icon class="h-5 w-5 text-gray-500"/>
                 </button>
