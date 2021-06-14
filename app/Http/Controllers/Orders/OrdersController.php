@@ -227,7 +227,6 @@ class OrdersController extends Controller
     
     public function sum($id)
     {
-
       $orders = Order::where('raise_order_id', $id)->where('deleted_at', NULL)->select('order_item', 'memo', DB::raw('sum(order_cost) as order_cost_sum'), DB::raw('sum(order_quantity) as order_quantity_sum'))->groupBy('order_item', 'memo')->get();
       
       $restaurant = RaiseOrder::where('raise_orders.id', $id)->where('raise_orders.deleted_at', NULL)->join('restaurants', 'restaurants.id', '=', 'raise_orders.restaurant_id')->select('restaurants.restaurant_name', 'restaurants.restaurant_telephone', 'restaurants.restaurant_address')->firstOrFail();

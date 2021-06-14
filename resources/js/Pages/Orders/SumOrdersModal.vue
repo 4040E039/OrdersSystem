@@ -57,6 +57,7 @@
     import JetInputError from '@/Jetstream/InputError'
     import JetLabel from '@/Jetstream/Label'
     import { onMounted, ref } from "vue";
+    import _ from 'lodash'
     
     export default {
         components: {
@@ -80,7 +81,7 @@
             await axios.get(`/orders-api/sum/${props.raiseOrderId}`).then(response => {
               sumOrder.value = response.data.orders
               restaurant.value = response.data.restaurant
-              for(let row of response.data.orders) handlerTotal.value += row.order_cost_sum
+              for(let row of response.data.orders) handlerTotal.value += _.ceil(row.order_cost_sum, 2)
             })
           }
           onMounted(getSumOrder)
