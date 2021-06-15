@@ -20,7 +20,7 @@
                 </div>
             </div>
         </div>
-        <add-restaurant-modal v-if="openModel" :open-model="openModel" @close-modal="closeModal" />
+        <add-restaurant-modal :open-model="openModel" @close-modal="closeModal" />
     </app-layout>
 </template>
 
@@ -30,11 +30,16 @@
     import TailwindTable from '@/Component/Tailwind/TailwindTable'
     import AddRestaurantModal from '@/Pages/RestaurantList/AddRestaurantModal'
     import JetSearchInput from '@/Jetstream/SearchInput'
-
     import { ref, onMounted, watch } from "vue";
     
     export default {
-        components: { JetButton, AppLayout, TailwindTable, AddRestaurantModal, JetSearchInput },
+        components: { 
+          JetButton, 
+          AppLayout, 
+          TailwindTable, 
+          AddRestaurantModal, 
+          JetSearchInput 
+        },
         data() {
           return {
             openModel: false,

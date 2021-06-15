@@ -1,7 +1,8 @@
 <template>
-
+    <!-- Loading -->
+    <tailwind-loading v-if="! handlerDisplay && openModel" />
     <!-- Add  Order Modal -->
-    <jet-dialog-modal :show="openModel" @close="closeModal()">
+    <jet-dialog-modal :show="openModel" v-else @close="closeModal()">
         <template #title>
            Add Order Modal
         </template>
@@ -31,8 +32,9 @@
               <jet-textarea id="memo" class="mt-1 block w-full" v-model="form.memo" autocomplete="memo" />
           </div>
         </template>
+        
         <template #footer>
-            <jet-button type="button" class="ml-4" v-if="handlerSaveButtonDisplay" @click="save()">
+            <jet-button type="button" class="ml-4" @click="save()">
                 Save
             </jet-button>
         </template>
@@ -40,13 +42,14 @@
 </template>
 
 <script>
+    import TailwindLoading from '@/Component/Tailwind/TailwindLoading'
     import JetButton from '@/Jetstream/Button'
     import JetDialogModal from '@/Jetstream/DialogModal'
     import JetInput from '@/Jetstream/Input'
     import JetTextarea from '@/Jetstream/Textarea'
     import JetInputError from '@/Jetstream/InputError'
     import JetLabel from '@/Jetstream/Label'
-    import { reactive, onMounted, ref } from "vue";
+    import { reactive, ref, onMounted, watch } from 'vue'
     
     export default {
         components: {
@@ -56,6 +59,7 @@
             JetInputError,
             JetLabel,
             JetTextarea,
+            TailwindLoading
         },
         emits: ["close-modal"],
         props: {
@@ -64,8 +68,8 @@
           isEdit: Number
         },
         setup(props) {
-          const handlerSaveButtonDisplay = ref(false)
-
+          const modalParam = reactive(props)
+          const handlerDisplay = ref(false)
           const form = reactive({
             order_item: null,
             order_quantity: null,
@@ -79,22 +83,39 @@
             order_cost: null,
             memo: null,
           })
-          if(props.isEdit) {
-            const getOrder = async () => {
-              await axios.get(`/orders-api/${props.isEdit}`).then(response => {
-                form.order_item = response.data.order_item
-                form.order_quantity = response.data.order_quantity
-                form.order_cost = response.data.order_cost
-                form.memo = response.data.memo
-                handlerSaveButtonDisplay.value = true
-              })
+
+          const getOrder = async () => {
+            if(props.openModel) {
+              handlerDisplay.value = false
+              if(props.isEdit) {
+                await axios.get(`/orders-api/${props.isEdit}`).then(response => {
+                  form.order_item = response.data.order_item
+                  form.order_quantity = response.data.order_quantity
+                  form.order_cost = response.data.order_cost
+                  form.memo = response.data.memo
+                  handlerDisplay.value = true
+                })
+              } else {
+                form.order_item = null
+                form.order_quantity = null
+                form.order_cost = null
+                form.memo = null
+                handlerDisplay.value = true
+              }
+            } else {
+              // errors init
+              errors.order_item = null
+              errors.order_quantity = null
+              errors.order_cost = null
+              errors.memo = null
             }
-            onMounted(getOrder)
-          } else handlerSaveButtonDisplay.value = true
+          }
+          onMounted(getOrder)
+          watch(modalParam, getOrder)
           return {
             form,
             errors,
-            handlerSaveButtonDisplay
+            handlerDisplay
           };
         },
         methods: {

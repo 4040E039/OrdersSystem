@@ -47,7 +47,16 @@
     import TailwindAlert from '@/Component/Tailwind/TailwindAlert'
 
     export default {
-        components: { AppLayout, DescriptionLists, JetButton, RestaurantNav, PlusIcon, Viewer, XCircleIcon, TailwindAlert },
+        components: { 
+          AppLayout, 
+          DescriptionLists, 
+          JetButton, 
+          RestaurantNav, 
+          PlusIcon, 
+          Viewer, 
+          XCircleIcon, 
+          TailwindAlert 
+        },
         props: {
           id: String,
           urlList: Array,

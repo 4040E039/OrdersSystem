@@ -46,7 +46,7 @@
     export default {
       components: { JetButton, ChevronLeftIcon, ChevronRightIcon, VueTailwindPagination},
       props: ['table-header', 'table-list', 'has-action'],
-      emit: ['detail', 'edit', 'remove'],
+      emits: ['detail', 'edit', 'remove'],
       data() {
           return {
             thead: {

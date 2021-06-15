@@ -1,6 +1,8 @@
 <template>
+    <!-- Loading -->
+    <tailwind-loading v-if="! handlerDisplay && openModel" />
     <!-- Add Restaurant Modal -->
-    <jet-dialog-modal :show="openModel" @close="closeModal()">
+    <jet-dialog-modal :show="openModel" v-else @close="closeModal()">
         <template #title>
             Add Restaurant Comments
         </template>
@@ -24,7 +26,7 @@
         </template>
 
         <template #footer>
-            <jet-button type="text" class="ml-4" v-if="handlerSaveButtonDisplay" @click="save()">
+            <jet-button type="text" class="ml-4" @click="save()">
                 Release
             </jet-button>
         </template>
@@ -32,13 +34,14 @@
 </template>
 
 <script>
+    import TailwindLoading from '@/Component/Tailwind/TailwindLoading'
     import JetButton from '@/Jetstream/Button'
     import JetDialogModal from '@/Jetstream/DialogModal'
     import JetInput from '@/Jetstream/Input'
     import JetTextarea from '@/Jetstream/Textarea'
     import JetInputError from '@/Jetstream/InputError'
     import JetLabel from '@/Jetstream/Label'
-    import { reactive, onMounted, ref } from "vue";
+    import { onMounted, ref, reactive, watch } from "vue";
     import { StarIcon as SolidStarIcon } from '@heroicons/vue/solid'
     import { StarIcon as OutlineStarIcon } from '@heroicons/vue/outline'
 
@@ -51,7 +54,8 @@
             JetLabel,
             JetTextarea,
             SolidStarIcon,
-            OutlineStarIcon
+            OutlineStarIcon,
+            TailwindLoading
         },
         emits: ["close-modal"],
         props: {
@@ -60,7 +64,8 @@
           isEdit: Number
         },
         setup(props) {
-          const handlerSaveButtonDisplay = ref(false)
+          const handlerDisplay = ref(false)
+          const modalParam = reactive(props)
           const form = reactive({
             score: 0,
             message: null,
@@ -70,20 +75,33 @@
             score: null,
             message: null,
           })
-          if(props.isEdit) {
-            const getRestaurantComment = async () => {
-              await axios.get(`/restaurant-comment-api/${props.isEdit}`).then(response => {
-                form.score = response.data.score
-                form.message = response.data.message
-                handlerSaveButtonDisplay.value = true
-              })
+
+          const getRestaurantComment = async () => {
+            if(props.openModel) {
+              handlerDisplay.value = false
+              if(props.isEdit) {
+                await axios.get(`/restaurant-comment-api/${props.isEdit}`).then(response => {
+                  form.score = response.data.score
+                  form.message = response.data.message
+                  handlerDisplay.value = true
+                })
+              } else {
+                form.score = 0
+                form.message = null
+                handlerDisplay.value = true
+              }
+            } else {
+              errors.score = null
+              errors.message = null
             }
-            onMounted(getRestaurantComment)
-          } else handlerSaveButtonDisplay.value = true
+          }
+          onMounted(getRestaurantComment)
+          watch(modalParam, getRestaurantComment)
+
           return {
             form,
             errors,
-            handlerSaveButtonDisplay
+            handlerDisplay
           };
         },
         methods: {

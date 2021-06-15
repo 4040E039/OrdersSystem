@@ -95,7 +95,7 @@
             </div>
           </div>
         </div>
-        <add-restaurant-comments-modal :isEdit="isEdit" :restaurantId="id" v-if="openModel" :open-model="openModel" @close-modal="closeModal" />
+        <add-restaurant-comments-modal :isEdit="isEdit" :restaurantId="id" :open-model="openModel" @close-modal="closeModal" />
     </app-layout>
 </template>
 

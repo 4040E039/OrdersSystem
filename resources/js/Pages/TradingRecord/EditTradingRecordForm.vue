@@ -66,7 +66,18 @@
     import{ ChevronDoubleLeftIcon } from '@heroicons/vue/solid'
 
     export default {
-        components: { AppLayout, JetButton, JetInput, JetTextarea, JetLabel, JetActionMessage, JetSecondaryButton, JetFormSection, JetInputError,ChevronDoubleLeftIcon },
+        components: { 
+          AppLayout, 
+          JetButton, 
+          JetInput, 
+          JetTextarea, 
+          JetLabel, 
+          JetActionMessage, 
+          JetSecondaryButton, 
+          JetFormSection, 
+          JetInputError,
+          ChevronDoubleLeftIcon 
+        },
         props: {
           trading_record: Object,
           id: String

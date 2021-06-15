@@ -55,7 +55,16 @@
     import JetLabel from '@/Jetstream/Label'
 
     export default {
-        components: { AppLayout, JetNavLink, JetButton, TwoColumnForm, JetInput, JetTextarea, JetLabel, TailwindAlert },
+        components: { 
+          AppLayout, 
+          JetNavLink, 
+          JetButton, 
+          TwoColumnForm, 
+          JetInput, 
+          JetTextarea, 
+          JetLabel, 
+          TailwindAlert 
+        },
         props: {
           restaurant: Object,
           id: String

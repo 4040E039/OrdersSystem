@@ -124,8 +124,8 @@
             <!-- End of component -->
           </div>
         </div>
-        <add-orders-modal :isEdit="isEdit" :raiseOrderId = "id" v-if="openAddOrdersModel" :open-model="openAddOrdersModel" @close-modal="closeAddOrderModal" />
-        <sum-orders-modal :raiseOrderId = "id" v-if="openSumOrdersModel" :open-model="openSumOrdersModel" @close-modal="closeSumOrderModal" />
+        <add-orders-modal :isEdit="isEdit" :raiseOrderId = "id" :open-model="openAddOrdersModel" @close-modal="closeAddOrderModal" />
+        <sum-orders-modal :raiseOrderId = "id" :open-model="openSumOrdersModel" @close-modal="closeSumOrderModal" />
     </app-layout>
 </template>
 

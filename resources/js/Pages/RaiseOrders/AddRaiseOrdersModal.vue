@@ -1,6 +1,8 @@
 <template>
+    <!-- Loading -->
+    <tailwind-loading v-if="! handlerDisplay && openModel" />
     <!-- Add / Edit RaiseOrder Modal -->
-    <jet-dialog-modal :show="openModel" @close="closeModal()">
+    <jet-dialog-modal :show="openModel" v-else @close="closeModal()">
         <template #title>
            {{isEdit ? 'Edit' : 'Add'}} RaiseOrder Modal
         </template>
@@ -44,7 +46,7 @@
         </template>
 
         <template #footer>
-            <jet-button type="text" class="ml-4" v-if="handlerSaveButtonDisplay" @click="save()">
+            <jet-button type="text" class="ml-4"  @click="save()">
                 Save
             </jet-button>
         </template>
@@ -52,13 +54,14 @@
 </template>
 
 <script>
+    import TailwindLoading from '@/Component/Tailwind/TailwindLoading'
     import JetButton from '@/Jetstream/Button'
     import JetDialogModal from '@/Jetstream/DialogModal'
     import JetInput from '@/Jetstream/Input'
     import JetTextarea from '@/Jetstream/Textarea'
     import JetInputError from '@/Jetstream/InputError'
     import JetLabel from '@/Jetstream/Label'
-    import { reactive, ref, onMounted } from "vue";
+    import { reactive, ref, onMounted, watch } from 'vue'
     import { DatePicker } from 'v-calendar';
     import moment from 'moment'
     import VueNextSelect from 'vue-next-select'
@@ -73,7 +76,8 @@
             JetLabel,
             JetTextarea,
             DatePicker,
-            VueNextSelect
+            VueNextSelect,
+            TailwindLoading
         },
         emits: ["close-modal"],
         props: {
@@ -81,50 +85,70 @@
           isEdit: Number
         },
         setup(props) {
-          const handlerSaveButtonDisplay = ref(false)
-
+          const handlerDisplay = ref(false)
+          const modalParam = reactive(props)
           const form = reactive({
-            start_time: moment().format('YYYY-MM-DD HH:mm:ss'),
+            start_time: null,
             raise_order_theme: null,
             open_duration: null,
             memo: null,
             restaurant_selected: null,
           })
+
           const errors = reactive({
             start_time: null,
             raise_order_theme: null,
             open_duration: null,
             choose_restaurant: null
           })
+          const options = ref([])
 
-          let options = ref([])
-          if(! props.isEdit) {
-            const getRestaurants = async () => {
-              await axios.post(route('restaurant-api.index')).then(response => {
+          const getRestaurants = async () => {
+            if(props.openModel && ! props.isEdit) {
+                await axios.post(route('restaurant-api.index')).then(response => {
                 options.value = response.data
-                handlerSaveButtonDisplay.value = true
               })
             }
-            onMounted(getRestaurants)
-          } else {
-            const getRaiseOrders = async () => {
-              await axios.get(`/raise-orders-api/${props.isEdit}`).then(response => {
-                form.raise_order_theme = response.data.raise_order_theme
-                form.memo = response.data.memo
-                form.start_time = response.data.start_time
-                form.restaurant_selected = response.data.restaurant_id
-                form.open_duration = moment(response.data.end_time).diff(response.data.start_time, "minute");
-                handlerSaveButtonDisplay.value = true
-              })
-            }
-            onMounted(getRaiseOrders)
           }
 
+          const getRaiseOrders = async () => {
+            if(props.openModel) {
+              // init
+              handlerDisplay.value = false
+              if(props.isEdit) {
+                await axios.get(`/raise-orders-api/${props.isEdit}`).then(response => {
+                  form.start_time = response.data.start_time
+                  form.raise_order_theme = response.data.raise_order_theme
+                  form.open_duration = moment(response.data.end_time).diff(response.data.start_time, "minute");
+                  form.memo = response.data.memo
+                  form.restaurant_selected = response.data.restaurant_id
+                  handlerDisplay.value = true
+                })
+              } else  {
+                form.start_time = moment().format('YYYY-MM-DD HH:mm:ss'),
+                form.raise_order_theme = null
+                form.open_duration = null
+                form.memo = null
+                form.restaurant_selected  = null
+                handlerDisplay.value = true
+              }
+            } else {
+              // errors init
+              errors.start_time = null
+              errors.raise_order_theme = null
+              errors.open_duration = null
+              errors.choose_restaurant = null
+            }
+          }
+
+          onMounted(getRaiseOrders)
+          watch(modalParam, getRestaurants)
+          watch(modalParam, getRaiseOrders)
           return {
             form,
             errors,
             options,
-            handlerSaveButtonDisplay
+            handlerDisplay
           };
         },
         methods: {

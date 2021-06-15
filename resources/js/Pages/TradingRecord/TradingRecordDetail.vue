@@ -38,7 +38,12 @@
     import JetButton from '@/Jetstream/Button'
 
     export default {
-        components: { AppLayout, DescriptionLists, JetButton, RestaurantNav },
+        components: { 
+          AppLayout, 
+          DescriptionLists, 
+          JetButton, 
+          RestaurantNav 
+        },
         props: {
           tradingRecordDetail: Object,
           id: String

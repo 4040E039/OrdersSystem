@@ -75,7 +75,7 @@
             </div>
           </div>
         </div>
-        <add-raise-orders-modal :isEdit="isEdit" v-if="openModel" :open-model="openModel" @close-modal="closeModal" />
+        <add-raise-orders-modal :isEdit="isEdit" :open-model="openModel" @close-modal="closeModal" />
     </app-layout>
 </template>
 

@@ -74,7 +74,7 @@ class RaiseOrdersController extends Controller
           $validator = Validator::make($form, [
             'start_time' => 'required|date',
             'open_duration' => 'required|numeric|min: 5|max: 120',
-            'raise_order_theme' => 'required',
+            'raise_order_theme' => 'required|max: 10',
             'restaurant_selected' => 'required',
           ]);
     
@@ -138,7 +138,7 @@ class RaiseOrdersController extends Controller
         if($form !== null) {
           $validator = Validator::make($form, [
             'open_duration' => 'required|numeric|min: 5|max: 120',
-            'raise_order_theme' => 'required',
+            'raise_order_theme' => 'required|max: 10',
           ]);
     
           if($validator->fails()) {

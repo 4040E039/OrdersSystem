@@ -11,6 +11,7 @@
             <div class="mt-3">
                 <jet-label for="name" value="Restaurant Name" />
                 <jet-input id="name" type="text" class="mt-1 block w-full" v-model="form.name" autocomplete="name" />
+                <jet-input-error :message="errors.name" class="mt-2" />
             </div>
             <!-- Telephone -->
             <div class="mt-3">
@@ -44,7 +45,7 @@
     import JetTextarea from '@/Jetstream/Textarea'
     import JetInputError from '@/Jetstream/InputError'
     import JetLabel from '@/Jetstream/Label'
-    import { reactive } from "vue";
+    import { reactive, watch } from 'vue'
 
     export default {
         components: {
@@ -59,22 +60,40 @@
         props: {
           openModel: Boolean,
         },
-        setup() {
+        setup(props) {
+          const modalParam = reactive(props)
           const form = reactive({
             name: null,
             telephone: null,
             address: null,
             memo: null
           })
+          const errors = reactive({
+            name: null,
+          })
+          const errorsRest = () => {
+            errors.name = null
+          }
+          watch(modalParam, errorsRest)
           return {
-            form
+            form,
+            errors
           };
         },
         methods: {
+          handlerErrorMessage(errorMessage) {
+            for(let index in errorMessage) {
+              this.errors[index] = ""
+              for(let val of errorMessage[index]) {
+                if(val) this.errors[index] += `${val} `
+              }
+            }
+          },
           save() {
             axios.post(route('restaurant-api.store'), {...this.form})
             .then(response => {
               if(response.data.messages === "") this.closeModal()
+              else this.handlerErrorMessage(response.data.messages)
             })
           },
           closeModal() {

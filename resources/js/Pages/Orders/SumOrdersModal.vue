@@ -56,7 +56,7 @@
     import JetTextarea from '@/Jetstream/Textarea'
     import JetInputError from '@/Jetstream/InputError'
     import JetLabel from '@/Jetstream/Label'
-    import { onMounted, ref } from "vue";
+    import { onMounted, ref, reactive, watch } from "vue";
     import _ from 'lodash'
     
     export default {
@@ -74,17 +74,28 @@
           raiseOrderId: String,
         },
         setup(props) {
-          let sumOrder = ref(false)
-          let restaurant = ref(false)
-          let handlerTotal = ref(0)
+          const sumOrder = ref(false)
+          const restaurant = ref(false)
+          const handlerTotal = ref(0)
+          const modalParam = reactive(props)
+
           const getSumOrder = async () => {
-            await axios.get(`/orders-api/sum/${props.raiseOrderId}`).then(response => {
-              sumOrder.value = response.data.orders
-              restaurant.value = response.data.restaurant
-              for(let row of response.data.orders) handlerTotal.value += _.ceil(row.order_cost_sum, 2)
-            })
+            // init
+            sumOrder.value = false
+            restaurant.value = false
+            handlerTotal.value = 0
+
+            if(props.openModel) {
+              await axios.get(`/orders-api/sum/${props.raiseOrderId}`).then(response => {
+                sumOrder.value = response.data.orders
+                restaurant.value = response.data.restaurant
+                for(let row of response.data.orders) handlerTotal.value += _.ceil(row.order_cost_sum, 2)
+              })
+            }
           }
+
           onMounted(getSumOrder)
+          watch(modalParam, getSumOrder)
           return {
             sumOrder,
             restaurant,
