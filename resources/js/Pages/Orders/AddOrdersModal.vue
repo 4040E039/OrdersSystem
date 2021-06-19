@@ -83,7 +83,6 @@
             order_cost: null,
             memo: null,
           })
-
           const getOrder = async () => {
             if(props.openModel) {
               handlerDisplay.value = false
@@ -95,19 +94,7 @@
                   form.memo = response.data.memo
                   handlerDisplay.value = true
                 })
-              } else {
-                form.order_item = null
-                form.order_quantity = null
-                form.order_cost = null
-                form.memo = null
-                handlerDisplay.value = true
-              }
-            } else {
-              // errors init
-              errors.order_item = null
-              errors.order_quantity = null
-              errors.order_cost = null
-              errors.memo = null
+              } else handlerDisplay.value = true
             }
           }
           onMounted(getOrder)
@@ -127,6 +114,14 @@
               }
             }
           },
+          formReset() {
+            for(const key in this.errors) {
+              this.errors[key] = null
+            }
+            for(const key in this.form) {
+              if(key !== 'raise_order_id') this.form[key] = null
+            }
+          },
           save() {
             if(this.isEdit) {
               axios.put(`/orders-api/${this.isEdit}`, {form: this.form})
@@ -143,6 +138,7 @@
             }
           },
           closeModal() {
+            this.formReset()
             this.$emit('close-modal', false)
           }
         },

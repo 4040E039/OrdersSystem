@@ -85,14 +85,7 @@
                   form.message = response.data.message
                   handlerDisplay.value = true
                 })
-              } else {
-                form.score = 0
-                form.message = null
-                handlerDisplay.value = true
-              }
-            } else {
-              errors.score = null
-              errors.message = null
+              } else handlerDisplay.value = true
             }
           }
           onMounted(getRestaurantComment)
@@ -113,22 +106,37 @@
               }
             }
           },
+          formReset() {
+            for(const key in this.errors) {
+              this.errors[key] = null
+            }
+            // Clear data in editing state
+            if(this.isEdit) {
+              for(const key in this.form) {
+                if(key !== 'restaurantId') {
+                  if(typeof(this.form[key]) === 'number') this.form[key] = 0
+                  else this.form[key] = null
+                }
+              }
+            }
+          },
           save() {
             if(this.isEdit) {
               axios.put(`/restaurant-comment-api/${this.isEdit}`, {...this.form})
               .then(response => {
                 if(response.data.messages === "") this.closeModal()
-                  else this.handlerErrorMessage(response.data.messages)
+                else this.handlerErrorMessage(response.data.messages)
               })
             } else {
               axios.post(route('restaurant-comment-api.store'), {...this.form})
               .then(response => {
                 if(response.data.messages === "") this.closeModal()
-                  else this.handlerErrorMessage(response.data.messages)
+                else this.handlerErrorMessage(response.data.messages)
               })
             }
           },
           closeModal() {
+            this.formReset()
             this.$emit('close-modal', false)
           },
           handlerScore(i) {

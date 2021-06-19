@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Restaurant;
 use Inertia\Inertia;
-use Validator;
 use Illuminate\Support\Facades\Storage;
 use App\Models\RestaurantsComment;
 use Illuminate\Support\Facades\Auth;
@@ -49,18 +48,10 @@ class RestaurantsController extends Controller
     public function store(Request $request)
     {
       //
-      $result = array(
-        "messages" => "",
-      );
 
-      $validator = Validator::make($request->all(), [
+      $this->validate($request, [
         'name' => 'required',
       ]);
-
-      if($validator->fails()) {
-        $result['messages'] = $validator->errors();
-        return $result;
-      }
 
       $restaurant = new Restaurant;
       $restaurant->restaurant_name = $request->input('name');
@@ -68,7 +59,7 @@ class RestaurantsController extends Controller
       $restaurant->restaurant_address = $request->input('address');
       $restaurant->memo = $request->input('memo');
       $restaurant->save();
-      return $result;
+      return back();
     }
 
     /**

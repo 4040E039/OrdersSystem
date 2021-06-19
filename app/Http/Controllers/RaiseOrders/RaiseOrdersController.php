@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use App\Models\RaiseOrder;
 use App\Models\Order;
 use App\Models\TradingRecord;
-use Validator;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
@@ -66,35 +65,27 @@ class RaiseOrdersController extends Controller
      */
     public function store(Request $request)
     {
-        $result = array(
-          "messages" => "",
-        );
-        $form = $request->input('form');
-        if($form !== null) {
-          $validator = Validator::make($form, [
-            'start_time' => 'required|date',
-            'open_duration' => 'required|numeric|min: 5|max: 120',
-            'raise_order_theme' => 'required|max: 10',
-            'restaurant_selected' => 'required',
-          ]);
-    
-          if($validator->fails()) {
-            $result['messages'] = $validator->errors();
-            return $result;
-          }
-          $open_duration = '+'.$form['open_duration'].' minutes';
-          $user = Auth::user();
-          $raise_order = new RaiseOrder;
-          $raise_order->user_id = $user['id'];
-          $raise_order->restaurant_id = $form['restaurant_selected']['id'];
-          $raise_order->raise_order_token = time();
-          $raise_order->raise_order_theme = trim($form['raise_order_theme']);
-          $raise_order->start_time = date("Y-m-d H:i:s", strtotime($form['start_time']));
-          $raise_order->end_time = date("Y-m-d H:i:s", strtotime($open_duration, strtotime($form['start_time'])));
-          $raise_order->memo = $form['memo'];
-          $raise_order->save();
-          return $result;
-        } else abort(404);
+
+        $this->validate($request, [
+          'start_time' => 'required|date',
+          'open_duration' => 'required|numeric|min: 5|max: 120',
+          'raise_order_theme' => 'required|max: 10',
+          'restaurant_selected' => 'required',
+        ]);
+        
+        $form = $request->all();
+        $open_duration = '+'.$form['open_duration'].' minutes';
+        $user = Auth::user();
+        $raise_order = new RaiseOrder;
+        $raise_order->user_id = $user['id'];
+        $raise_order->restaurant_id = $form['restaurant_selected']['id'];
+        $raise_order->raise_order_token = time();
+        $raise_order->raise_order_theme = trim($form['raise_order_theme']);
+        $raise_order->start_time = date("Y-m-d H:i:s", strtotime($form['start_time']));
+        $raise_order->end_time = date("Y-m-d H:i:s", strtotime($open_duration, strtotime($form['start_time'])));
+        $raise_order->memo = $form['memo'];
+        $raise_order->save();
+        return back();
     }
 
     /**
@@ -130,31 +121,20 @@ class RaiseOrdersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
-        $result = array(
-          "messages" => "",
-        );
-        $form = $request->input('form');
-        if($form !== null) {
-          $validator = Validator::make($form, [
-            'open_duration' => 'required|numeric|min: 5|max: 120',
-            'raise_order_theme' => 'required|max: 10',
-          ]);
-    
-          if($validator->fails()) {
-            $result['messages'] = $validator->errors();
-            return $result;
-          }
-          
-          $open_duration = '+'.$form['open_duration'].' minutes';
-          $raise_order = RaiseOrder::findOrFail($id);
-          $raise_order->raise_order_theme = trim($form['raise_order_theme']);
-          $raise_order->end_time = date("Y-m-d H:i:s", strtotime($open_duration, strtotime($raise_order['start_time'])));
-          $raise_order->memo = $form['memo'];
-          $raise_order->save();
-          return $result;
 
-        } else abort(404);
+        $this->validate($request, [
+          'open_duration' => 'required|numeric|min: 5|max: 120',
+          'raise_order_theme' => 'required|max: 10',
+        ]);
+        
+        $form = $request->all();
+        $open_duration = '+'.$form['open_duration'].' minutes';
+        $raise_order = RaiseOrder::findOrFail($id);
+        $raise_order->raise_order_theme = trim($form['raise_order_theme']);
+        $raise_order->end_time = date("Y-m-d H:i:s", strtotime($open_duration, strtotime($raise_order['start_time'])));
+        $raise_order->memo = $form['memo'];
+        $raise_order->save();
+        return back();
     }
 
     /**
