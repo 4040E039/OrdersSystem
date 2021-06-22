@@ -9,14 +9,14 @@
           <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="container mx-auto px-4"> 
               <section class="py-4 px-2">
-                <viewer :images="photoList" class="flex flex-wrap w-full space-x-4">
-                  <label style="height: 205px;" for="images" class="relative sm:w-1/5 mb-8 w-full">
+                <viewer :images="photoList" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 sm:gap-3 md:gap-4">
+                  <label style="height: 205px;" for="images" class="relative w-full">
                     <div class="w-full h-full flex items-center justify-center border-dashed border-2 border-gray-400 cursor-pointer hover:bg-gray-200 focus:ring-gray-300 transition">
                       <plus-icon class="h-5 w-5 text-gray-500" />
                       <input id="images" name="images" multiple="multiple" @change="uploadPhoto" accept="image/*" type="file" class="sr-only" />
                     </div>
                     </label>
-                    <div style="height: 205px"  v-for="url of urlList" :key="url.id" class="sm:w-1/5 mx-4 mb-8 relative">
+                    <div style="height: 205px"  v-for="url of urlList" :key="url.id" class="mb-8 relative">
                       <img title="click me view photo" :src="url.path" class="rounded shadow-md cursor-pointer w-full h-full">
                       <button type="text" class="p-0.5 absolute -top-3 -right-3 bg-white text-red-500 border-transparent rounded-full z-10 transition font-semibold" @click="remove(url.id)">
                         <x-circle-icon class="h-7 w-7 text-red-500" />

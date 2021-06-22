@@ -5,7 +5,7 @@
          <search-icon class="h-5 w-5 text-gray-500"/>
       </span>
     </div>
-    <jet-input id="search" type="text" class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-9 pr-12 sm:text-sm border-gray-300 rounded-md" :placeholder="placeholder" v-model="search" autocomplete="search" />
+    <jet-input id="search" type="text" class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-9 sm:text-sm border-gray-300 rounded-md" :placeholder="placeholder" v-model="search" autocomplete="search" />
   </div>
 </template>
 

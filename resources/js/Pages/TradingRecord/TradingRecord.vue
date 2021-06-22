@@ -9,7 +9,7 @@
         <div class="py-3 sm:py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="flex items-center justify-end mb-4">
-                    <inertia-link :href="route('trading-record.chat')">
+                    <inertia-link :href="route('trading-record.chat')" class="sm:block hidden">
                       <button class="p-2 mr-2 text-center"> 
                         <chart-bar-icon class="w-5 h-5 text-gray-500"/>
                       </button>

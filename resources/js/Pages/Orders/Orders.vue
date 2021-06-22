@@ -11,7 +11,7 @@
               </div>
             </h2> 
         </template>
-        <div class="py-3 sm:py-12">
+        <div class="p-3 sm:py-12">
           <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="flex justify-end items-center space-x-2 mb-3">
               <button v-if="countDown > 0 " @click="handlerOrdersModal(0)" title="add order" class="p-2 focus:outline-none focus:ring focus:border-gray-100 rounded-full">
@@ -66,8 +66,8 @@
               </div>
             </transition>
             <!-- Start of Order Cards component -->
-            <div v-show="orders" class="flex flex-wrap w-full space-x-4">
-              <div v-for="(order, index) of orders" :key="index" class="sm:w-1/3 max-w-sm bg-white border-2 border-gray-300 p-4 rounded-md tracking-wide shadow-lg">
+            <div v-show="orders" class="grid sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
+              <div v-for="(order, index) of orders" :key="index" class="w-full bg-white border-2 border-gray-300 p-4 rounded-md tracking-wide shadow-lg">
                 <div id="header" class="flex items-center mb-4"> 
                   <img :alt="order[0].name" class="w-16 rounded-full border-2 border-gray-300" :src="order[0].profile_photo_path" />
                   <div id="header-text" class="leading-5 ml-6 space-y-1">

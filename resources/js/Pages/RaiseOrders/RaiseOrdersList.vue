@@ -7,10 +7,10 @@
         </template>
         <div class="py-3 sm:py-12">
           <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
-            <div class="flex flex-wrap justify-end items-center mb-10 space-x-2 sm:space-y-0 space-y-1">
+            <div class="flex justify-end flex-wrap items-center mb-10 space-x-2 sm:space-y-0 space-y-1">
                <date-picker v-model="range" is-range is-required> 
                   <template v-slot="{ inputValue, inputEvents }">
-                    <div class="flex flex-wrap items-center justify-end sm:space-y-0 space-y-1 space-x-2">
+                    <div class="flex justify-end flex-wrap items-center space-x-2">
                       <jet-input
                         :value="inputValue.start"
                         v-on="inputEvents.start"
@@ -32,7 +32,7 @@
               </jet-button>
             </div>
             <!-- component -->
-            <div v-show="raiseOrders" class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4">
+            <div v-show="raiseOrders" class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4">
                 <div v-for="raiseOrder of raiseOrders" :key="raiseOrder.id" class="relative bg-white py-5 px-7 rounded-3xl w-64 my-3 shadow-xl mx-auto">
                     <div class="bg-white flex items-center absolute rounded-full p-0.5 shadow-xl left-4 -top-6 border-2 border-gray-400">
                         <img class="h-14 w-14 rounded-full object-cover" :src="handlerPhoto(raiseOrder.profile_photo_path, raiseOrder.name)" />
