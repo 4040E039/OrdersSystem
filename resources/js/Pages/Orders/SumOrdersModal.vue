@@ -71,7 +71,7 @@
         emits: ["close-modal"],
         props: {
           openModel: Boolean,
-          raiseOrderId: String,
+          raiseOrderId: Number,
         },
         setup(props) {
           const sumOrder = ref(false)

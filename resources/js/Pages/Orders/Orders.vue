@@ -176,7 +176,7 @@
           SumOrdersModal
         },
         props: {
-          id: String,
+          id: Number,
           raiseOrder: Object,
         },
         data() {

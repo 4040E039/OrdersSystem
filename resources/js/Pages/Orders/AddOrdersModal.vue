@@ -64,7 +64,7 @@
         emits: ["close-modal"],
         props: {
           openModel: Boolean,
-          raiseOrderId: String,
+          raiseOrderId: Number,
           isEdit: Number
         },
         setup(props) {

@@ -19,13 +19,13 @@ class OrdersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($id)
+    public function index($token)
     {
       $now =  Carbon::now();
-      $raise_order = RaiseOrder::where('raise_orders.id', $id)->where('raise_orders.start_time', '<=', $now)->where('raise_orders.deleted_at', NULL)->join('users', 'users.id', '=', 'raise_orders.user_id')->join('restaurants', 'restaurants.id', '=', 'raise_orders.restaurant_id')->select('raise_orders.*', 'users.name', 'restaurants.restaurant_name', 'restaurants.restaurant_telephone')->firstOrFail();
+      $raise_order = RaiseOrder::where('raise_orders.raise_order_token', $token)->where('raise_orders.start_time', '<=', $now)->where('raise_orders.deleted_at', NULL)->join('users', 'users.id', '=', 'raise_orders.user_id')->join('restaurants', 'restaurants.id', '=', 'raise_orders.restaurant_id')->select('raise_orders.*', 'users.name', 'restaurants.restaurant_name', 'restaurants.restaurant_telephone')->firstOrFail();
 
       return Inertia::render('Orders/Orders', [
-        'id' => $id,
+        'id' => $raise_order['id'],
         'raiseOrder' => $raise_order,
       ]);
     }

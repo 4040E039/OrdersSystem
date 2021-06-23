@@ -44,7 +44,7 @@
                       <button v-if="raiseOrder.user_id === $attrs.user.id" class="bg-transparent text-gray-500" @click="handlerRaiseOrdersModal(raiseOrder.id)">
                          <pencil-alt-icon class="h-5 w-5 text-gray-500"/>
                       </button>
-                      <button v-if="raiseOrder.status === 1 || raiseOrder.status === 2" class="bg-transparent text-gray-500" @click="orders(raiseOrder.id)">
+                      <button v-if="raiseOrder.status === 1 || raiseOrder.status === 2" class="bg-transparent text-gray-500" @click="orders(raiseOrder.raise_order_token)">
                          <chat-icon class="h-5 w-5 text-gray-500"/>
                       </button>
                     </div>
@@ -185,8 +185,8 @@
             if(path) return `storage/${path}`;
             else return `https://ui-avatars.com/api/?name=${name}&color=7F9CF5&background=EBF4FF`;
           },
-          orders(id) {
-            this.$inertia.get(`orders/${id}`)
+          orders(token) {
+            this.$inertia.get(`orders/${token}`)
           },
           removeRaiseOrders(id) {
             if(confirm('Do you want to delete this raise order?')) {
