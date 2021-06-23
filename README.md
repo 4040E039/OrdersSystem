@@ -1,4 +1,17 @@
-## About OrdersSystem
+# About OrdersSystem
+
+## 目的
+**簡化公司內部訂餐流程，讓訂餐更快速且方便**
+
+## 使用工具 / 技術
+Laravel Jetstream、Tailwind、Vue3
+
+## 流程圖
+![image](https://user-images.githubusercontent.com/26296219/123101672-e0e83880-d466-11eb-8137-f7c0d0221d93.png)
+
+
+
+## 如何安裝
 1. composer install.
 2. npm install.
 3. npm run dev.
