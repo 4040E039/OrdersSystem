@@ -7,7 +7,8 @@
 Laravel Jetstream、Tailwind、Vue3
 
 ## 流程圖
-![image](https://user-images.githubusercontent.com/26296219/123095017-281efb00-d460-11eb-9ebc-6a3f4ecdb020.png)
+![image](https://user-images.githubusercontent.com/26296219/123101672-e0e83880-d466-11eb-8137-f7c0d0221d93.png)
+
 
 
 ## 如何安裝
