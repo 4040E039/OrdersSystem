@@ -149,7 +149,6 @@
     import SumOrdersModal from '@/Pages/Orders/SumOrdersModal'
     import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
     import JetSearchInput from '@/Jetstream/SearchInput'
-    import _ from 'lodash'
 
     export default {
         components: { 

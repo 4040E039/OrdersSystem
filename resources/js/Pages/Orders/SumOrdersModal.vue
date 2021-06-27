@@ -57,7 +57,6 @@
     import JetInputError from '@/Jetstream/InputError'
     import JetLabel from '@/Jetstream/Label'
     import { onMounted, ref, reactive, watch } from "vue";
-    import _ from 'lodash'
     
     export default {
         components: {

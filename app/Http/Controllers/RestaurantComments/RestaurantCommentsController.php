@@ -53,11 +53,11 @@ class RestaurantCommentsController extends Controller
           return $result;
         }
 
-        $user = Auth::user();
+        $user_id = Auth::id();
         if($request->input('restaurantId')) {
           $restaurant_comment = new RestaurantsComment;
           $restaurant_comment->restaurant_id = $request->input('restaurantId');
-          $restaurant_comment->user_id = $user['id'];
+          $restaurant_comment->user_id = $user_id;
           $restaurant_comment->score = $request->input('score');
           $restaurant_comment->message = $request->input('message');
           $restaurant_comment->save();
@@ -113,11 +113,11 @@ class RestaurantCommentsController extends Controller
           return $result;
         }
 
-        $user = Auth::user();
+        $user_id = Auth::id();
         if($request->input('restaurantId')) {
           $restaurant_comment = RestaurantsComment::findOrFail($id);;
           $restaurant_comment->restaurant_id = $request->input('restaurantId');
-          $restaurant_comment->user_id = $user['id'];
+          $restaurant_comment->user_id = $user_id;
           $restaurant_comment->score = $request->input('score');
           $restaurant_comment->message = $request->input('message');
           $restaurant_comment->save();

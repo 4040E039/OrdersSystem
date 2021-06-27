@@ -75,9 +75,9 @@ class RaiseOrdersController extends Controller
         
         $form = $request->all();
         $open_duration = '+'.$form['open_duration'].' minutes';
-        $user = Auth::user();
+        $user_id = Auth::id();
         $raise_order = new RaiseOrder;
-        $raise_order->user_id = $user['id'];
+        $raise_order->user_id = $user_id;
         $raise_order->restaurant_id = $form['restaurant_selected']['id'];
         $raise_order->raise_order_token = time();
         $raise_order->raise_order_theme = trim($form['raise_order_theme']);
@@ -146,12 +146,12 @@ class RaiseOrdersController extends Controller
     public function destroy($id)
     {
         //
-        $user = Auth::user();
+        $user_id = Auth::id();
 
         $result = array(
           "messages" => "",
         );
-        $raise_order = RaiseOrder::where('id', $id)->where('user_id', $user['id'])->where('deleted_at', NULL)->first();
+        $raise_order = RaiseOrder::where('id', $id)->where('user_id', $user_id)->where('deleted_at', NULL)->first();
 
         if($raise_order) RaiseOrder::destroy($id);
         else $result['messages'] = "delete fail";

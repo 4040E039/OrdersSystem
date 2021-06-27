@@ -10,6 +10,7 @@ use App\Http\Controllers\RaiseOrders\RaiseOrdersController;
 use App\Http\Controllers\Orders\OrdersController;
 use App\Http\Controllers\TradingRecords\TradingRecordsController;
 use App\Http\Controllers\RestaurantComments\RestaurantCommentsController;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,12 +24,17 @@ use App\Http\Controllers\RestaurantComments\RestaurantCommentsController;
 */
 
 Route::get('/', function () {
-    return Inertia::render('Welcome', [
+    if(Auth::check()) {
+      return Inertia::render('RaiseOrders/RaiseOrdersList');
+    } else {
+      return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
-    ]);
+      ]);
+    }
+
 });
 
 // dashboard 暫不需要

@@ -81,7 +81,7 @@ class RestaurantsController extends Controller
         );
 
         $restaurants_comment = RestaurantsComment::where('restaurant_id', $id)->join('users', 'users.id', '=', 'restaurants_comments.user_id')->select('restaurants_comments.*', 'users.profile_photo_path' ,'users.name')->orderBy('updated_at', 'desc')->get();
-        $user = Auth::user();
+        $user_id = Auth::id();
 
         $is_release = false;
         if(count($restaurants_comment) > 0) {
@@ -91,17 +91,17 @@ class RestaurantsController extends Controller
             } else {
               $row['profile_photo_path'] = "https://ui-avatars.com/api/?name=". $row['name']."&color=7F9CF5&background=EBF4FF";
             }
-            if($row['user_id'] === $user['id']) $is_release = true;
+            if($row['user_id'] === $user_id) $is_release = true;
           }
         }
 
         $collection = collect($restaurants_comment);
 
-        $un_user_id_filter = $collection->filter(function ($row) use($user) {
-          return $row['user_id'] !== $user['id'];
+        $un_user_id_filter = $collection->filter(function ($row) use($user_id) {
+          return $row['user_id'] !== $user_id;
         });
-        $user_id_filter = $collection->filter(function ($row) use($user) {
-          return $row['user_id'] === $user['id'];
+        $user_id_filter = $collection->filter(function ($row) use($user_id) {
+          return $row['user_id'] === $user_id;
         });
 
         foreach($user_id_filter as $row) $un_user_id_filter->prepend($row);

@@ -70,8 +70,8 @@ class OrdersController extends Controller
           $now =  Carbon::now();
           RaiseOrder::where('raise_orders.id', $form['raise_order_id'])->where('raise_orders.start_time', '<=', $now)->where('raise_orders.end_time', '>=', $now)->where('raise_orders.deleted_at', NULL)->join('users', 'users.id', '=', 'raise_orders.user_id')->join('restaurants', 'restaurants.id', '=', 'raise_orders.restaurant_id')->firstOrFail();
 
-          $user = Auth::user();
-          $order = Order::where('raise_order_id', $form['raise_order_id'])->where('deleted_at', NULL)->where('user_id', $user['id'])->where('order_item', trim($form['order_item']))->where('memo', trim($form['memo']))->first();
+          $user_id = Auth::id();
+          $order = Order::where('raise_order_id', $form['raise_order_id'])->where('deleted_at', NULL)->where('user_id', $user_id)->where('order_item', trim($form['order_item']))->where('memo', trim($form['memo']))->first();
 
           if($order) {
             $order->order_quantity =  $form['order_quantity'] + $order['order_quantity'];
@@ -79,7 +79,7 @@ class OrdersController extends Controller
           } else {
             $order = new Order;
             $order->raise_order_id = $form['raise_order_id'];
-            $order->user_id = $user['id'];
+            $order->user_id = $user_id;
             $order->order_item = trim($form['order_item']);
             $order->order_quantity = $form['order_quantity'];
             $order->order_cost = $form['order_quantity'] * $form['order_cost'];
@@ -108,7 +108,7 @@ class OrdersController extends Controller
           $orders = Order::where('raise_order_id', $raise_order_id)->where('deleted_at', NULL)->join('users', 'users.id', '=', 'orders.user_id')->select('orders.*', 'users.profile_photo_path', 'users.name')->orderBy('updated_at', 'desc')->get();
         }
         
-        $litigant_user = Auth::user();
+        $user_id = Auth::id();
         $order_sort_array = array();
 
         if(count($orders) > 0) {
@@ -121,11 +121,11 @@ class OrdersController extends Controller
           }
 
           $collection = collect($orders);
-          $un_litigant_id_filter = $collection->filter(function ($row) use($litigant_user) {
-            return $row['user_id'] !== $litigant_user['id'];
+          $un_litigant_id_filter = $collection->filter(function ($row) use($user_id) {
+            return $row['user_id'] !== $user_id;
           });
-          $litigant_id_filter = $collection->filter(function ($row) use($litigant_user) {
-            return $row['user_id'] === $litigant_user['id'];
+          $litigant_id_filter = $collection->filter(function ($row) use($user_id) {
+            return $row['user_id'] === $user_id;
           });
 
           $litigant_id_filter = $litigant_id_filter->reverse();
@@ -167,9 +167,8 @@ class OrdersController extends Controller
         $form = $request->input('form');
         
         $old_order = Order::findOrFail($id);
-        $user = Auth::user();
-        
-        if($form !== null && $user['id'] === $old_order['user_id']) {
+        $user_id = Auth::id();
+        if($form !== null && $user_id === $old_order['user_id']) {
           $validator = Validator::make($form, [
             'order_item' => 'required',
             'order_quantity' => 'required|numeric|min: 1',
@@ -185,7 +184,7 @@ class OrdersController extends Controller
           $now =  Carbon::now();
           RaiseOrder::where('raise_orders.id', $form['raise_order_id'])->where('raise_orders.start_time', '<=', $now)->where('raise_orders.end_time', '>=', $now)->where('raise_orders.deleted_at', NULL)->join('users', 'users.id', '=', 'raise_orders.user_id')->join('restaurants', 'restaurants.id', '=', 'raise_orders.restaurant_id')->firstOrFail();
           
-          $order = Order::where('raise_order_id', $form['raise_order_id'])->where('deleted_at', NULL)->where('user_id', $user['id'])->where('order_item', trim($form['order_item']))->where('memo', trim($form['memo']))->first();
+          $order = Order::where('raise_order_id', $form['raise_order_id'])->where('deleted_at', NULL)->where('user_id', $user_id)->where('order_item', trim($form['order_item']))->where('memo', trim($form['memo']))->first();
 
           if($order && $old_order['id'] !== $order['id']) {
             $order->order_quantity =  $form['order_quantity'] + $order['order_quantity'];
@@ -213,12 +212,12 @@ class OrdersController extends Controller
     public function destroy($id)
     {
         //
-        $user = Auth::user();
+        $user_id = Auth::id();
         $result = array(
           "messages" => "",
         );
        
-        $order = Order::where('id', $id)->where('user_id', $user['id'])->where('deleted_at', NULL)->first();
+        $order = Order::where('id', $id)->where('user_id', $user_id)->where('deleted_at', NULL)->first();
         if($order) Order::destroy($id);
         else $result['messages'] = "delete fail";
 

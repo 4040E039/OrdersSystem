@@ -18,14 +18,14 @@ class TradingRecordsController extends Controller
     public function index(Request $request)
     {
         //
-        $user = Auth::user();
+        $user_id = Auth::id();
         $search = $request->input('search');
 
         if($search !== null && $search !== "") {
-          $trading_record = TradingRecord::where("trading_item", 'like' ,'%'.$search.'%')->where("deleted_at", NULL)->where('user_id', $user['id'])->orderBy('created_at', 'desc')->get();
+          $trading_record = TradingRecord::where("trading_item", 'like' ,'%'.$search.'%')->where("deleted_at", NULL)->where('user_id', $user_id)->orderBy('created_at', 'desc')->get();
 
         } else {
-          $trading_record = TradingRecord::where("deleted_at", NULL)->where('user_id', $user['id'])->orderBy('created_at', 'desc')->get();
+          $trading_record = TradingRecord::where("deleted_at", NULL)->where('user_id', $user_id)->orderBy('created_at', 'desc')->get();
         }
 
         $result = array();
@@ -73,8 +73,8 @@ class TradingRecordsController extends Controller
     public function show($id)
     {
         //
-        $user = Auth::user();
-        $trading_record = TradingRecord::where('id', $id)->where('user_id', $user['id'])->firstOrFail();
+        $user_id = Auth::id();
+        $trading_record = TradingRecord::where('id', $id)->where('user_id', $user_id)->firstOrFail();
         $result = array(
           'Trading Item' => $trading_record['trading_item'],  
           'Trading Cost' => '$ '.$trading_record['trading_cost'],
@@ -97,8 +97,8 @@ class TradingRecordsController extends Controller
     public function edit($id)
     {
         //
-        $user = Auth::user();
-        $trading_record = TradingRecord::where('id', $id)->where('user_id', $user['id'])->firstOrFail();
+        $user_id = Auth::id();
+        $trading_record = TradingRecord::where('id', $id)->where('user_id', $user_id)->firstOrFail();
 
         return Inertia::render('TradingRecord/EditTradingRecordForm', [
           'trading_record' => $trading_record,
@@ -120,8 +120,8 @@ class TradingRecordsController extends Controller
           'trading_item' => 'required',
           'trading_cost' => 'required',
         ]);
-        $user = Auth::user();
-        $trading_record = TradingRecord::where('id', $id)->where('user_id', $user['id'])->firstOrFail();
+        $user_id = Auth::id();
+        $trading_record = TradingRecord::where('id', $id)->where('user_id', $user_id)->firstOrFail();
         $trading_record->trading_item = $request->input('trading_item');
         $trading_record->trading_cost = $request->input('trading_cost');
         $trading_record->memo = $request->input('memo');
@@ -138,11 +138,11 @@ class TradingRecordsController extends Controller
     public function destroy($id)
     {
         //
-        $user = Auth::user();
+        $user_id = Auth::id();
         $result = array(
           "messages" => "",
         );
-        $trading_record = TradingRecord::where('id', $id)->where('user_id', $user['id'])->first();
+        $trading_record = TradingRecord::where('id', $id)->where('user_id', $user_id)->first();
         if($trading_record) TradingRecord::destroy($id);
         else $result['messages'] = "delete fail";
 
@@ -156,7 +156,7 @@ class TradingRecordsController extends Controller
     public function monthly_cost()
     {
         //
-        $user = Auth::user();
+        $user_id = Auth::id();
 
         $result = array(
           "datasets" => array(
@@ -168,7 +168,7 @@ class TradingRecordsController extends Controller
           "labels" => array('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'),
         );
         // 大於今年
-        $trading_record = TradingRecord::where('user_id', $user['id'])->where('created_at', '>=', date('Y-01-01'))->where('deleted_at', NULL)->get();
+        $trading_record = TradingRecord::where('user_id', $user_id)->where('created_at', '>=', date('Y-01-01'))->where('deleted_at', NULL)->get();
         foreach($trading_record as $row){
           $row['cost_date'] = date('m', strtotime($row['created_at']));
         }
