@@ -9,6 +9,8 @@ Laravel Jetstream、Tailwind、Vue3
 ## 流程圖
 ![image](https://user-images.githubusercontent.com/26296219/123101672-e0e83880-d466-11eb-8137-f7c0d0221d93.png)
 
+## Dome
+https://orderssystem.herokuapp.com/
 
 
 ## 如何安裝
