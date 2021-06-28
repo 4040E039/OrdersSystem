@@ -150,7 +150,7 @@
         },
         methods: {
            edit(id) {
-            this.$inertia.get(`/restaurant-list/edit/${id}`)
+            this.$inertia.get(`/restaurant-api/${id}/edit`)
            },
            handlerCommentModal(id) {
              this.openModel = true

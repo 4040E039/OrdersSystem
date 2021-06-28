@@ -61,9 +61,8 @@
           let searchValue = ref("")
           const getTradingRecord = async () => {
             if(loading.value) return
-            await axios.post(route('trading-record-api.index'),{
-              search: searchValue.value
-            }).then(response => {
+            await axios.get(`trading-record-api?search=${searchValue.value}`)
+            .then(response => {
                 tradingRecord.value = response.data
                 loading.value = true
             })
@@ -75,7 +74,7 @@
         },
         methods: {
           viewDetail(id) {
-            this.$inertia.get(`trading-record-list/${id}`)
+            this.$inertia.get(`trading-record-api/${id}`)
           },
           search(data) {
             this.searchValue = data

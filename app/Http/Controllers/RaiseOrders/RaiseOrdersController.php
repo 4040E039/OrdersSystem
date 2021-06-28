@@ -23,20 +23,21 @@ class RaiseOrdersController extends Controller
         // get Restaurant list
         $raise_orders = array();
         $now =  Carbon::now();
-        $status = $request->input('status');
+        $status = (int)$request->input('status');
         $search = $request->input('search');
-        $search_date_range = $request->input('searchDateRange');
-
-        $raise_orders = RaiseOrder::where(function($query) use($now, $status, $search, $search_date_range){
+        $search_start_date = $request->input('startDate');
+        $search_end_date = $request->input('endDate');
+        
+        $raise_orders = RaiseOrder::where(function($query) use($now, $status, $search, $search_start_date, $search_end_date){
           $query->where('deleted_at', NULL);
           if($status === 1)  $query->where('start_time', '<=', $now)->where('end_time', '>=', $now);
           elseif($status === 2)  $query->where('end_time', '<' ,$now);
           elseif($status === 3)  $query->where('start_time', '>', $now);
           if($search !== null && $search !== "") $query->where('raise_order_theme', 'like' , "%".$search."%");
-          if($search_date_range !== null) {
-            $start_range = Carbon::parse($search_date_range['start']);
-            $end_range = Carbon::parse($search_date_range['end'].' 23:59:59');
-            if($search_date_range['start'] === $search_date_range['end']) $query->where('start_time', '>=',  $start_range);
+          if($search_start_date && $search_end_date) {
+            $start_range = Carbon::parse($search_start_date);
+            $end_range = Carbon::parse($search_end_date.' 23:59:59');
+            if($search_start_date === $search_end_date) $query->where('start_time', '>=',  $start_range);
             else $query->where('start_time', '>=',  $start_range)->where('end_time', '<=', $end_range);
           }
         })->join('users', 'users.id', '=', 'raise_orders.user_id')->join('restaurants', 'restaurants.id', '=', 'raise_orders.restaurant_id')->select('raise_orders.*', 'users.profile_photo_path','users.name')->orderBy('start_time', 'desc')->get();

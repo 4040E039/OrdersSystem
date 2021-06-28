@@ -2,7 +2,7 @@
     <app-layout>
       <div class="py-3 sm:py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-          <inertia-link :href="`/trading-record-list/${id}`">
+          <inertia-link :href="`/trading-record-api/${id}`">
             <button class="mb-12 shadow text-gray-50 bg-gray-400 px-3 py-1 rounded">
                 <chevron-double-left-icon class="h-5 w-5" />
             </button>

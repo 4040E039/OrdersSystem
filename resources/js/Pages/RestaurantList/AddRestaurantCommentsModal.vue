@@ -80,7 +80,7 @@
             if(props.openModel) {
               handlerDisplay.value = false
               if(props.isEdit) {
-                await axios.get(`/restaurant-comment-api/${props.isEdit}`).then(response => {
+                await axios.get(`/restaurant-comment-api/${props.isEdit}/edit`).then(response => {
                   form.score = response.data.score
                   form.message = response.data.message
                   handlerDisplay.value = true

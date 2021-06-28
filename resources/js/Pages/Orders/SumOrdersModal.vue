@@ -85,7 +85,7 @@
             handlerTotal.value = 0
 
             if(props.openModel) {
-              await axios.get(`/orders-api/sum/${props.raiseOrderId}`).then(response => {
+              await axios.get(`/orders-api/${props.raiseOrderId}/sum`).then(response => {
                 sumOrder.value = response.data.orders
                 restaurant.value = response.data.restaurant
                 for(let row of response.data.orders) handlerTotal.value += _.ceil(row.order_cost_sum, 2)

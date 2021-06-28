@@ -144,11 +144,8 @@
 
           const getRaiseOrders = async () => {
             if(loading.value) return
-            await axios.post(route('raise-orders-api.index'),{
-              status: selected.value,
-              search: searchValue.value,
-              searchDateRange: range.value
-            }).then(response => {
+            await axios.get(`raise-orders-api?status=${selected.value}&search=${searchValue.value}&startDate=${range.value.start}&endDate=${range.value.end}`)
+            .then(response => {
                 raiseOrders.value = response.data
                 loading.value = true
             })
@@ -186,7 +183,7 @@
             else return `https://ui-avatars.com/api/?name=${name}&color=7F9CF5&background=EBF4FF`;
           },
           orders(token) {
-            this.$inertia.get(`orders/${token}`)
+            this.$inertia.get(`orders-api?orderToken=${token}`)
           },
           removeRaiseOrders(id) {
             if(confirm('Do you want to delete this raise order?')) {

@@ -87,7 +87,7 @@
             if(props.openModel) {
               handlerDisplay.value = false
               if(props.isEdit) {
-                await axios.get(`/orders-api/${props.isEdit}`).then(response => {
+                await axios.get(`/orders-api/${props.isEdit}/edit`).then(response => {
                   form.order_item = response.data.order_item
                   form.order_quantity = response.data.order_quantity
                   form.order_cost = response.data.order_cost

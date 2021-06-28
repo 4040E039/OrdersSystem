@@ -69,7 +69,7 @@
             <div v-show="orders" class="grid sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
               <div v-for="(order, index) of orders" :key="index" class="w-full bg-white border-2 border-gray-300 p-4 rounded-md tracking-wide shadow-lg">
                 <div id="header" class="flex items-center mb-4"> 
-                  <img :alt="order[0].name" class="w-16 rounded-full border-2 border-gray-300" :src="order[0].profile_photo_path" />
+                  <img :alt="order[0].name" class="w-16 h-16 rounded-full border-2 border-gray-300" :src="order[0].profile_photo_path" />
                   <div id="header-text" class="leading-5 ml-6 space-y-1">
                     <p class="text-xl font-semibold">{{order[0].name}}</p>
                     <p class="font-semibold text-blue-600 text-sm">$ {{handlerTotal(order)}}</p>
@@ -192,10 +192,8 @@
 
           const getOrders = async () => {
             if(loading.value) return
-            await axios.post(route('orders-api.show'),{
-              search: searchValue.value,
-              raiseOrderId: props.raiseOrder.id
-            }).then(response => {
+            await axios.get(`orders-api/${props.raiseOrder.id}?search=${searchValue.value}`)
+            .then(response => {
                 orders.value = response.data
                 loading.value = true
             })
@@ -216,8 +214,8 @@
             } 
           }
           const handlerRaiseOrdersDetailDisplay = ref(false);
-          const restaurantDetailUrl = ref(`/restaurant-list/${props.raiseOrder.restaurant_id}`)
-          const restaurantPhotosUrl = ref(`/restaurant-list/photos/${props.raiseOrder.restaurant_id}`)
+          const restaurantDetailUrl = ref(`/restaurant-api/${props.raiseOrder.restaurant_id}`)
+          const restaurantPhotosUrl = ref(`/restaurant-photos-api/${props.raiseOrder.restaurant_id}`)
           const RemainingTime = () => {
             let time = "00 : 00 : 00"
             if(countDown.value > 0) {
@@ -267,7 +265,7 @@
           },
           raiseOrderCompleted(id) {
             if(confirm('Do you want to raise order complete?')) {
-                axios.put(`/raise-orders-api/completed/${id}`)
+                axios.put(`/raise-orders-api/${id}/completed`)
                 .then(response => { 
                   if(response.data.messages === "") setTimeout(() => this.$inertia.reload(), 100 )
                   else alert(response.data.messages)

@@ -53,9 +53,8 @@
           let searchValue = ref("")
           const getRestaurants = async () => {
             if(loading.value) return
-            await axios.post(route('restaurant-api.index'),{
-              search: searchValue.value
-            }).then(response => {
+            await axios.get(`restaurant-api?search=${searchValue.value}`)
+            .then(response => {
                 restaurants.value = response.data
                 loading.value = true
             })
@@ -75,7 +74,7 @@
              this.loading = val
           },
           viewDetail(id) {
-            this.$inertia.get(`restaurant-list/${id}`)
+            this.$inertia.get(`restaurant-api/${id}`)
           },
           remove(id) {
              if(confirm('Do you want to delete this restaurant?')) {

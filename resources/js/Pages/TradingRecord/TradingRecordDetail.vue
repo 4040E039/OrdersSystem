@@ -54,7 +54,7 @@
         },
         methods: {
            edit(id) {
-            this.$inertia.get(`/trading-record-list/edit/${id}`)
+            this.$inertia.get(`/trading-record-api/${id}/edit`)
            }
         },
     }

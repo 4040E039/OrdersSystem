@@ -100,7 +100,7 @@
           const options = ref([])
           const getRestaurants = async () => {
             if(props.openModel && ! props.isEdit) {
-                await axios.post(route('restaurant-api.index')).then(response => {
+                await axios.get(route('restaurant-api.index')).then(response => {
                 options.value = response.data
               })
             }
@@ -110,7 +110,7 @@
             if(props.openModel) {
               handlerDisplay.value = false
               if(props.isEdit) {
-                await axios.get(`/raise-orders-api/${props.isEdit}`).then(response => {
+                await axios.get(`/raise-orders-api/${props.isEdit}/edit`).then(response => {
                   form.start_time = response.data.start_time
                   form.raise_order_theme = response.data.raise_order_theme
                   form.open_duration = moment(response.data.end_time).diff(response.data.start_time, "minute");
