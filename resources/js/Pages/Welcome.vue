@@ -5,7 +5,7 @@
       <h1 class="font-bold text-5xl text-white">Welcome !</h1>
     </div>
     <div class="flex items-center justify-center flex-wrap">
-        <inertia-link v-if="canRegister" :href="route('login')" class="cursor-pointer p-12">
+        <inertia-link v-if="canLogin" :href="route('login')" class="cursor-pointer p-12">
             <div class="py-8 rounded-md shadow-lg bg-white hover:bg-yellow-800 hover:bg-opacity-75 hover:text-white  transition duration-400">
                 <div class="flex items-center justify-center w-48">
                     <div class="p-5 font-bold text-xl text-center space-y-2">
