@@ -10,7 +10,7 @@ Laravel Jetstream、Tailwind、Vue3
 ![image](https://user-images.githubusercontent.com/26296219/123101672-e0e83880-d466-11eb-8137-f7c0d0221d93.png)
 
 ## Dome
-### 使用 heroku 免費方案架設 半小時未使用需等20秒喚醒時間
+#### 使用 heroku，免費方案架設 半小時未使用需等20秒喚醒時間
 https://orderssystem.herokuapp.com/
 
 
